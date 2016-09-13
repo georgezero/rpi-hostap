@@ -66,7 +66,7 @@ sudo docker run -d -t \
   -e OUTGOINGS=eth0 \
   --privileged \
   --net host \
-  sdelrio/rpi-hostap:latest
+  georgezero/rpi-hostap:latest
 ```
 
 To test interactively, you may want to start a tmux session and then:
@@ -83,7 +83,7 @@ sudo docker run -it \
   -e OUTGOINGS=eth0 \
   --privileged \
   --net host \
-  sdelrio/rpi-hostap:latest
+  georgezero/rpi-hostap:latest
 ```
 
 But before this, hostap usually requires that wlan0 interface to be already up, so before `docker run` take the interface up:
