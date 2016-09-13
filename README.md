@@ -9,6 +9,7 @@ Since my last change on ISP, they put a cable modem with a horrible Wireless, it
 
 Most of the time use wireless devices on same room so I decided to try to convert my current Pi on a small Access Point using a small USB dongle.
 
+Made minor changes to support for older USB dongles that only support G and now can pass IEEE80211N=0.  Also example below shows passing HT_CAPAB values for older USB wifi standards.
 
 # Requirements
 
@@ -60,6 +61,25 @@ sudo docker run -d -t \
   -e APADDR=192.168.254.1 \
   -e SUBNET=192.168.254.0 \
   -e WPA_PASSPHRASE=passw0rd \
+  -e IEEE80211N=0 \
+  -e HT_CAPAB=[HT20][SHORT-GI-20] \
+  -e OUTGOINGS=eth0 \
+  --privileged \
+  --net host \
+  sdelrio/rpi-hostap:latest
+```
+
+To test interactively, you may want to start a tmux session and then:
+```
+sudo docker run -it \
+  -e INTERFACE=wlan0 \
+  -e CHANNEL=6 \
+  - e SSID=runssid \
+  -e APADDR=192.168.254.1 \
+  -e SUBNET=192.168.254.0 \
+  -e WPA_PASSPHRASE=passw0rd \
+  -e IEEE80211N=0 \
+  -e HT_CAPAB=[HT20][SHORT-GI-20] \
   -e OUTGOINGS=eth0 \
   --privileged \
   --net host \
