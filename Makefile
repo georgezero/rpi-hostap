@@ -1,5 +1,5 @@
 IMGNAME = rpi-hostap
-VERSION = 0.21
+VERSION = 0.22
 SUBNET  = 192.168.254.0
 APADDR  = 192.168.254.1
 .PHONY: all build test taglatest  
@@ -11,7 +11,7 @@ build:
 test:
 	@sudo /sbin/ifconfig wlan0 $(APADDR)/24 down 
 	@sudo /sbin/ifconfig wlan0 $(APADDR)/24 up 
-	sudo docker run -t \
+	sudo docker run -it \
         --name $(IMGNAME)_test \
 	-e INTERFACE=wlan0 \
 	-e SSID=testssid \
@@ -20,8 +20,10 @@ test:
 	-e SSID=testssid \
 	-e CHANNEL=6 \
 	-e WPA_PASSPHRASE=passw0rd \
+	-e IEEE80211N=0 \
+	-e HT_CAPAB=[HT20][SHORT-GI-20] \
 	-e OUTGOINGS=eth0 \
-        --entrypoint=/bin/test.sh \
+        --entrypoint=/bin/wlanstart.sh \
 	--privileged \
 	--net host \
 	--rm \
@@ -38,6 +40,8 @@ run:
 	-e APADDR=$(APADDR) \
 	-e SUBNET=$(SUBNET) \
 	-e WPA_PASSPHRASE=passw0rd \
+	-e IEEE80211N=0 \
+	-e HT_CAPAB=[HT20][SHORT-GI-20] \
 	-e OUTGOINGS=eth0 \
 	--privileged \
 	--net host \
@@ -55,6 +59,8 @@ shell:
 	-e APADDR=$(APADDR) \
 	-e SUBNET=$(SUBNET) \
 	-e WPA_PASSPHRASE=passw0rd \
+	-e IEEE80211N=0 \
+	-e HT_CAPAB=[HT20][SHORT-GI-20] \
 	-e OUTGOINGS=eth0 \
 	--privileged \
 	--net host \
@@ -67,9 +73,9 @@ clean:
 	@docker rmi $(IMGNAME):$(VERSION)
 taglatest:
 	docker tag -f $(IMGNAME):$(VERSION) $(IMGNAME):lastest
-	docker tag -f $(IMGNAME):$(VERSION) sdelrio/$(IMGNAME):$(VERSION)
-	docker tag -f $(IMGNAME):$(VERSION) sdelrio/$(IMGNAME):latest
+	docker tag -f $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):$(VERSION)
+	docker tag -f $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):latest
 push:
-	docker push sdelrio/$(IMGNAME)
-	docker push sdelrio/$(IMGNAME):$(VERSION)
+	docker push georgezero/$(IMGNAME)
+	docker push georgezero/$(IMGNAME):$(VERSION)
 release: taglatest push
