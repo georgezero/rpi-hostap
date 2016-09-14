@@ -1,5 +1,5 @@
 IMGNAME = rpi-hostap
-VERSION = 0.22
+VERSION = 0.23
 SUBNET  = 192.168.254.0
 APADDR  = 192.168.254.1
 .PHONY: all build test taglatest  
@@ -72,9 +72,9 @@ clean:
 	@docker ps -a |grep rpi-hostap |cut -f 1 -d' '|xargs -P1 -i docker rm {}
 	@docker rmi $(IMGNAME):$(VERSION)
 taglatest:
-	docker tag -f $(IMGNAME):$(VERSION) $(IMGNAME):lastest
-	docker tag -f $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):$(VERSION)
-	docker tag -f $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):latest
+	docker tag $(IMGNAME):$(VERSION) $(IMGNAME):lastest
+	docker tag $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):$(VERSION)
+	docker tag $(IMGNAME):$(VERSION) georgezero/$(IMGNAME):latest
 push:
 	docker push georgezero/$(IMGNAME)
 	docker push georgezero/$(IMGNAME):$(VERSION)

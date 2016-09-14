@@ -1,3 +1,7 @@
+# Thanks to sdelrio/rpi-hostap and dedosmedia/rpi-hostap
+
+Incorporated dedosmedia/rpi-hostap changes to support rp3, and made some minor tweaks so that older usb dongles (B/G only) will also work
+
 # Docker container stack: hostap + dhcp server 
 
 Designed to work on **Raspberry Pi** (arm) using as base image alpine linux (very little size).
@@ -69,6 +73,23 @@ sudo docker run -d -t \
   georgezero/rpi-hostap:latest
 ```
 
+rpi3:
+```
+sudo docker run -d -t \
+  -e INTERFACE=wlan0 \
+  -e CHANNEL=6 \
+  -e SSID=runssid \
+  -e APADDR=192.168.254.1 \
+  -e SUBNET=192.168.254.0 \
+  -e WPA_PASSPHRASE=passw0rd \
+  -e IEEE80211N=1 \
+  -e HT_CAPAB=[HT40][SHORT-GI-20][DSSS_CCK-40] \
+  -e OUTGOINGS=eth0 \
+  --privileged \
+  --net host \
+  georgezero/rpi-hostap:latest
+```
+
 To test interactively, you may want to start a tmux session and then:
 ```
 sudo docker run -it \
@@ -80,6 +101,23 @@ sudo docker run -it \
   -e WPA_PASSPHRASE=passw0rd \
   -e IEEE80211N=0 \
   -e HT_CAPAB=[HT20][SHORT-GI-20] \
+  -e OUTGOINGS=eth0 \
+  --privileged \
+  --net host \
+  georgezero/rpi-hostap:latest
+```
+
+rpi3:
+```
+sudo docker run -it \
+  -e INTERFACE=wlan0 \
+  -e CHANNEL=6 \
+  -e SSID=runssid \
+  -e APADDR=192.168.254.1 \
+  -e SUBNET=192.168.254.0 \
+  -e WPA_PASSPHRASE=passw0rd \
+  -e IEEE80211N=1 \
+  -e HT_CAPAB=[HT40][SHORT-GI-20][DSSS_CCK-40] \
   -e OUTGOINGS=eth0 \
   --privileged \
   --net host \
